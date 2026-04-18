@@ -1,0 +1,38 @@
+<html>
+    <head><title>ZEROधा</title></head>
+    <BODY>
+        <div>
+            <img width="150" src="https://zerodha.com/static/images/logo.svg" ></img>
+            <span>
+                Signup
+            </span>
+            <span>
+                About
+            </span>
+            <span>
+                Products
+            </span>
+            <span>
+                Pricing
+            </span>
+            <span>
+                Report
+            </span>
+        </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <center>
+            <img width="850" src="https://zerodha.com/static/images/landing.svg" ></img>
+        </center>
+        <br></br>
+        <br></br>
+        <center>
+            <h1>INVEST IN EVERYTHING !</h1>
+            <h3>Online platform to invest in stocks, derivatives, mutual funds, ETFs, bonds, and more.</h3>
+            <button>Sign up for free</button>
+        </center>
+    </BODY>
+    
+</html>
