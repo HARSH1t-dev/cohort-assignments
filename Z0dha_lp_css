@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEROधा</title>
+    <style>
+        body {
+            font-family: Inter, serif;
+            margin: 0;
+            padding: 0;
+            color: #424242;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 100px;
+        }
+        
+        .nav-links {
+            display: flex;
+        }
+        
+        .nav-links div {
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            text-align: center;
+        }
+        
+        .hero-heading {
+            font-size: 44px;
+            font-weight: 500;
+            margin-top: 50px;
+            margin-bottom: 10px;
+        }
+        
+        .hero-subtext {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            background-color: #387ed1;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="navbar">
+        <img width="130" src="https://zerodha.com/static/images/logo.svg" alt="Zerodha Logo">
+        <div class="nav-links">  
+            <div>Signup</div>
+            <div>About</div>
+            <div>Products</div>
+            <div>Pricing</div>
+            <div>Support</div>
+        </div>
+    </div>
+
+    <div class="hero">
+        <img width="850" src="https://zerodha.com/static/images/landing.svg" alt="Invest in everything">
+        <div class="hero-heading">
+            Invest in everything
+        </div>
+        <div class="hero-subtext">
+            Online platform to invest in stocks, derivatives, mutual funds, ETFs, bonds, and more.
+        </div>
+        <button>Sign up for free</button>
+    </div>
+
+</body>
+</html>
