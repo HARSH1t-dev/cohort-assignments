@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Card Generator</title>
+    <style>
+        :root {
+            --primary: #ef5350;
+            --bg: #f4f4f9;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.5s ease; 
+        }
+        
+
+        h1 {
+            color: var(--primary);
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d32f2f;
+        }
+
+        #pokemon-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 20px;
+            text-transform: capitalize;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 120px;
+            height: 120px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .card .id-badge {
+            background: #eee;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .types {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .type {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: white;
+            background: #888;
+        }
+
+        
+        #status {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PokéDex Generator</h1>
+
+    <div class="controls">
+        <div>
+            <label for="count">Number of Cards: </label>
+            <input type="number" id="count" min="1" max="50" value="5">
+        </div>
+        <div>
+            <label for="category">Category (Type): </label>
+            <select id="category">
+                <option value="fire">Fire</option>
+                <option value="water">Water</option>
+                <option value="grass">Grass</option>
+                <option value="electric">Electric</option>
+                <option value="psychic">Psychic</option>
+                <option value="ice">Ice</option>
+                <option value="dragon">Dragon</option>
+                <option value="dark">Dark</option>
+                <option value="fairy">Fairy</option>
+                <option value="normal">Normal</option>
+            </select>
+        </div>
+        <button onclick="generateCards()">Generate</button>
+    </div>
+
+    <div id="status"></div>
+    <div id="pokemon-container"></div>
+
+    <script>
+        const typeThemes = {
+        fire: { primary: '#d32f2f', bg: '#ffebee' },
+        water: { primary: '#1976d2', bg: '#e3f2fd' },
+        grass: { primary: '#388e3c', bg: '#e8f5e9' },
+        electric: { primary: '#fbc02d', bg: '#fffde7' },
+        psychic: { primary: '#c2185b', bg: '#fce4ec' },
+        ice: { primary: '#0097a7', bg: '#e0f7fa' },
+        dragon: { primary: '#512da8', bg: '#ede7f6' },
+        dark: { primary: '#455a64', bg: '#eceff1' },
+        fairy: { primary: '#c2185b', bg: '#fce4ec' },
+        normal: { primary: '#616161', bg: '#f5f5f5' }
+        };
+        function updateUITheme(type) {
+        const theme = typeThemes[type];
+    
+            if (theme) {
+                
+                const root = document.documentElement;
+                root.style.setProperty('--primary', theme.primary);
+                root.style.setProperty('--bg', theme.bg);
+            }
+        }
+        const categoryDropdown = document.getElementById('category');
+
+        categoryDropdown.addEventListener('change', (event) => {
+            const selectedType = event.target.value;
+            updateUITheme(selectedType);
+        });
+
+        updateUITheme(categoryDropdown.value);
+        async function generateCards() {
+            const count = document.getElementById('count').value;
+            const category = document.getElementById('category').value;
+            const container = document.getElementById('pokemon-container');
+            const status = document.getElementById('status');
+
+            
+            container.innerHTML = '';
+            status.innerText = 'Fetching Pokémon data...';
+
+            try {
+                // Step 1: Fetch the list of Pokémon by the selected category (type)
+                const typeResponse = await fetch(`https://pokeapi.co/api/v2/type/${category}`);
+                const typeData = await typeResponse.json();
+
+                // Slice the array to get only the requested number of Pokémon
+                const selectedPokemons = typeData.pokemon.slice(0, count);
+
+                if (selectedPokemons.length === 0) {
+                    status.innerText = 'No Pokémon found for this category.';
+                    return;
+                }
+
+                status.innerText = ''; 
+
+                
+                for (let p of selectedPokemons) {
+                    
+                    const urlParts = p.pokemon.url.split('/');
+                    const id = urlParts[urlParts.length - 2]; 
+                    const pokeResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                    const pokeData = await pokeResponse.json();
+
+                    renderCard(pokeData, container);
+                }
+
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+                status.innerText = 'An error occurred while fetching data. Check your console.';
+            }
+        }
+
+        function renderCard(data, container) {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const typesHtml = data.types.map(t => 
+                `<span class="type" style="background-color: ${getTypeColor(t.type.name)}">${t.type.name}</span>`
+            ).join('');
+
+            const imageUrl = data.sprites.front_default || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${data.name}">
+                <div class="id-badge">#${data.id.toString().padStart(3, '0')}</div>
+                <h3>${data.name}</h3>
+                <div class="types">
+                    ${typesHtml}
+                </div>
+            `;
+            
+            container.appendChild(card);
+        }
+
+        function getTypeColor(type) {
+            const colors = {
+                fire: '#FDDFDF',
+                water: '#DEF3FD',
+                grass: '#DEFDE0',
+                electric: '#FCF7DE',
+                psychic: '#EAEDA1',
+                ice: '#98D8D8',
+                dragon: '#97b3e6',
+                dark: '#705848',
+                fairy: '#fceaff',
+                normal: '#F5F5F5'
+            };
+
+            return colors[type] || '#ccc';
+        }
+    </script>
+</body>
+</html>
